@@ -188,10 +188,7 @@ def data_collection(cap, model, model_seg, tracker, out, total_frames, output_pa
                     merged_points = contour_data[1]  # The merged points array
                     
                     # Ensure points are in correct format (N, 2)
-                    if len(merged_points.shape) == 1:
-                        merged_points = merged_points.reshape(-1, 2)
-                    elif len(merged_points.shape) == 3:
-                        merged_points = merged_points.reshape(-1, 2)
+                    merged_points = merged_points.reshape(-1, 2)
                     
                     if len(merged_points) > 0:
                         # Draw points as circles

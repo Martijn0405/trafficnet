@@ -25,7 +25,7 @@ class ObjectTracker:
         
     def update(self, detections):
         if len(detections) == 0:
-            for object_id in list(self.disappeared.keys()):
+            for object_id in self.disappeared.keys():
                 self.disappeared[object_id] += 1
                 if self.disappeared[object_id] > self.max_disappeared:
                     self.deregister(object_id)
@@ -51,7 +51,7 @@ class ObjectTracker:
                             input_classes[i], input_confidences[i])
         else:
             object_centroids = [obj['centroid'] for obj in self.objects.values()]
-            object_ids = list(self.objects.keys())
+            object_ids = self.objects.keys()
             
             # Compute distance matrix
             D = np.linalg.norm(np.array(object_centroids)[:, np.newaxis] - 
