@@ -1,18 +1,19 @@
 import cv2
 from ultralytics import YOLO
+import os
 
-from helper_v_point import diamond_accumulator, find_vanishing_lines_center, find_vanishing_point_center
-from helper_v_grid import draw_vanishing_grid
-from helper_centroids import build_centroids_per_vehicle_id
-from helper_trajectories import export_trajectories
-from helper_tracker import ObjectTracker
-from helper_horizon import find_vanishing_point_horizon
-from helper_bev import find_hough_lines_bottom_intersections
-from helper_bounding_box import find_3d_bounding_boxes
-from helper_data import data_collection
-from helper_size import compute_trapezoid_width_function, compute_lines_width, compare_line_widths_to_function, compute_scene_depth
+from helpers.helper_v_point import diamond_accumulator, find_vanishing_lines_center, find_vanishing_point_center
+from helpers.helper_v_grid import draw_vanishing_grid
+from helpers.helper_centroids import build_centroids_per_vehicle_id
+from helpers.helper_trajectories import export_trajectories
+from helpers.helper_tracker import ObjectTracker
+from helpers.helper_horizon import find_vanishing_point_horizon
+from helpers.helper_bev import find_hough_lines_bottom_intersections
+from helpers.helper_bounding_box import find_3d_bounding_boxes
+from helpers.helper_data import data_collection
+from helpers.helper_size import compute_trapezoid_width_function, compute_lines_width, compare_line_widths_to_function, compute_scene_depth
    
-def main(input_path="video.mp4", output_path="export", model_name="yolo11n.pt", model_seg_name="yolo11s-seg.pt"):
+def main(input_path="/input/video.mp4", output_path="export", model_name="/models/yolo11s.pt", model_seg_name="/models/yolo11s-seg.pt"):
     print("1 [Process] Start")
 
     # Model
@@ -122,4 +123,8 @@ def main(input_path="video.mp4", output_path="export", model_name="yolo11n.pt", 
     print("[Completed]")
 
 if __name__ == "__main__":
-    main("video.mp4", "export", model_name="yolo11s.pt")
+    input_path = os.path.join(os.path.dirname(__file__), "input", "video.mp4")
+    output_path = os.path.join(os.path.dirname(__file__), "output")
+    model_name = os.path.join(os.path.dirname(__file__), "models", "yolo11s.pt")
+    model_seg_name = os.path.join(os.path.dirname(__file__), "models", "yolo11s-seg.pt")
+    main(input_path, output_path, model_name, model_seg_name)

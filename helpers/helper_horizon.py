@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-from helper_intersection import compute_vanishing_point
-from helper_functions import is_point_in_boundary_box
+from helpers.helper_intersection import compute_vanishing_point
+from helpers.helper_functions import is_point_in_boundary_box
 
 def find_vanishing_point_horizon(horizontal_lines_up, horizontal_lines_down, x_value=None,y_value=None, output_path=None, w=500, h=500):
     names = ["vehicle"]

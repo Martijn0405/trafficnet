@@ -1,4 +1,4 @@
-from helper_v_point import diamond_accumulator
+from helpers.helper_v_point import diamond_accumulator
 
 def main():
     w = 150

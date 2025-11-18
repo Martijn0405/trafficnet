@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from skimage.transform import hough_line, hough_line_peaks
 from skimage.draw import line as draw_line
-from helper_intersection import compute_vanishing_point
+
+from helpers.helper_intersection import compute_vanishing_point
 
 def find_vanishing_point(acc, vx_range, vy_range):
     i, j = np.unravel_index(np.argmax(acc), acc.shape)
@@ -15,7 +16,7 @@ def find_vanishing_point(acc, vx_range, vy_range):
 def line_params(x1, y1, x2, y2):
     if x2 == x1:
         m = np.inf
-        b = x1  # x = b
+        b = x1
     else:
         m = (y2 - y1) / (x2 - x1)
         b = y1 - m * x1

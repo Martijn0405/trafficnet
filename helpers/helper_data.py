@@ -2,7 +2,7 @@
 import cv2
 import numpy as np
 import os
-from helper_horizon import find_vanishing_point_horizon_frame
+from helpers.helper_horizon import find_vanishing_point_horizon_frame
 
 def data_collection(cap, model, model_seg, tracker, out, total_frames, output_path):
     contours = []
