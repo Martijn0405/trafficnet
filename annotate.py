@@ -109,7 +109,7 @@ def main(input_path="/input/video.mp4", output_path="export", model_name="/model
     # Estimate depth of scene
     print("10 [Size] Depth function")
     depth_function = compute_scene_depth(0, point1, point2, vp_center_x, vp_center_y)
-    print(f"- Depth function at 0%: {depth_function}")
+    print(f"- Depth function (0%): {depth_function}")
     lines_bottom_inner_width = compute_lines_width(lines_bottom_inner)
     print(f"- Lines bottom inner width: {lines_bottom_inner_width}")
 
