@@ -1,4 +1,3 @@
-import numpy as np
 import matplotlib.pyplot as plt
 
 def find_hough_lines_bottom_intersections(vp_center_x, vp_center_y, y_centroid_min, y_centroid_max, hough_lines, w, h, output_path=None):
@@ -100,7 +99,7 @@ def find_hough_lines_bottom_intersections(vp_center_x, vp_center_y, y_centroid_m
     
     # Create visualization
     if output_path:
-        fig, ax = plt.subplots(figsize=(w/100, h/100))
+        _, ax = plt.subplots(figsize=(w/100, h/100))
         
         # Draw each hough line
         for line in hough_lines:
@@ -153,8 +152,7 @@ def find_hough_lines_bottom_intersections(vp_center_x, vp_center_y, y_centroid_m
         ax.set_ylabel('Y Coordinate (pixels)', fontsize=12)
         ax.set_xlim(0, w)
         ax.set_ylim(0, h)
-        ax.set_title(f'Hough Lines Intersections - 4 Key Points', 
-                    fontsize=14, fontweight='bold')
+        ax.set_title('Hough Lines Intersections - 4 Key Points', fontsize=14, fontweight='bold')
         ax.grid(True, alpha=0.3)
         ax.legend(loc='best', fontsize=8)
         ax.invert_yaxis()  # Match image coordinates (origin at top-left)

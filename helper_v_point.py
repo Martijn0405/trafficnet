@@ -21,12 +21,12 @@ def line_params(x1, y1, x2, y2):
         b = y1 - m * x1
     return m, b
 
-def ccw(A,B,C):
-    return (C[1]-A[1]) * (B[0]-A[0]) >= (B[1]-A[1]) * (C[0]-A[0])
+def ccw(a, b, c):
+    return (c[1]-a[1]) * (b[0]-a[0]) >= (b[1]-a[1]) * (c[0]-a[0])
 
 # Return true if line segments AB and CD intersect
-def intersect(A,B,C,D):
-    return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D)
+def intersect(a, b, c, d):
+    return ccw(a,c,d) != ccw(b,c,d) and ccw(a,b,c) != ccw(a,b,d)
 
 def diamond_accumulator(lines, width, height, output_path=None, index=0):
     if lines is None: lines = []
@@ -117,8 +117,8 @@ def find_vanishing_lines_center(centroids_per_vehicle_id):
                     x2 = centroids[i + 1]['centroid_x']
                     y2 = centroids[i + 1]['centroid_y']
                     line_length = np.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-                    if line_length > 10 and line_length < 50:
-                        if j == 0: all_lines_vehicle.append([x1, y1, x2, y2])
+                    if line_length > 10 and line_length < 50 and j == 0:
+                        all_lines_vehicle.append([x1, y1, x2, y2])
             if j == 0: all_lines.append(all_lines_vehicle)
 
     return all_lines

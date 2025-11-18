@@ -33,7 +33,7 @@ def compute_trapezoid_width_function(point1, point2, point3, point4):
         # If y values are the same, return constant function
         a = 0.0
         b = width_bottom
-        def width(y):
+        def width(_=None):
             return width_bottom
     else:
         # Linear interpolation: a = (width_top - width_bottom) / (point3_y - point1_y)

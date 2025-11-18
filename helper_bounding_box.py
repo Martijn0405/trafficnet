@@ -26,7 +26,7 @@ def line_intersection(p1, p2, p3, p4):
 
     return [px, py]
 
-def compute_boundary_lines(contour, vp, line_length, w, h):
+def compute_boundary_lines(contour, vp, line_length):
     """
     Compute two boundary lines from a vanishing point that encompass all contour points.
     
@@ -34,18 +34,13 @@ def compute_boundary_lines(contour, vp, line_length, w, h):
         contour: Contour points as numpy array of shape (N, 2) or (N, 1, 2)
         vp: Vanishing point as numpy array [x, y]
         line_length: Length of the ray lines to draw
-        w: Image width
-        h: Image height
     
     Returns:
         ray1_end: Endpoint of first boundary line (numpy array)
         ray2_end: Endpoint of second boundary line (numpy array)
     """
     # Reshape contour to (N, 2) if needed
-    if len(contour.shape) == 3:
-        contour = contour.reshape(-1, 2)
-    elif len(contour.shape) == 2 and contour.shape[1] != 2:
-        contour = contour.reshape(-1, 2)
+    contour = contour.reshape(-1, 2)
     
     # Compute angles of each contour point relative to vanishing point
     angles = np.arctan2(contour[:, 1] - vp[1], contour[:, 0] - vp[0])
@@ -133,10 +128,10 @@ def draw_bounding_box_on_frame(frame_image, frame_contours, vp_center_x, vp_cent
                 vp_horizontal = np.array([vp_right_x, vp_right_y])
             
             # Compute boundary lines from center vanishing point
-            ray1_end, ray2_end = compute_boundary_lines(contour, vp, line_length, w, h)
+            ray1_end, ray2_end = compute_boundary_lines(contour, vp, line_length)
 
             # Compute boundary lines from horizontal vanishing point (left or right)
-            ray3_end, ray4_end = compute_boundary_lines(contour, vp_horizontal, line_length_side, w, h)
+            ray3_end, ray4_end = compute_boundary_lines(contour, vp_horizontal, line_length_side)
             
             # Find smallest and largest x coordinates on the contour
             x_coords = contour_reshaped[:, 0]
