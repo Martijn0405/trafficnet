@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 from helpers.helper_intersection import compute_vanishing_point
 from helpers.helper_functions import is_point_in_boundary_box
@@ -40,6 +41,7 @@ def find_vanishing_point_horizon(horizontal_lines_up, horizontal_lines_down, x_v
             sm.set_array([])
             plt.colorbar(sm, ax=plt.gca(), label='Line Segment Index')
             plt.tight_layout()
+            os.makedirs(output_path + "/vp_sides", exist_ok=True)
             plt.savefig(output_path + "/vp_sides/hough_lines_" + names[j] + "_up.png", dpi=300, bbox_inches='tight')
             plt.close()
     

@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from skimage.transform import hough_line, hough_line_peaks
 from skimage.draw import line as draw_line
+import os
 
 from helpers.helper_intersection import compute_vanishing_point
 
@@ -50,6 +51,7 @@ def diamond_accumulator(lines, width, height, output_path=None, index=0):
     # Set a precision of 0.5 degree.
     tested_angles = np.linspace(-np.pi / 2, np.pi / 2, 360, endpoint=False)
     h, theta, d = hough_line(image, theta=tested_angles)
+    os.makedirs(output_path + "/vp_center", exist_ok=True)
     base = output_path + "/vp_center/diamond_" + str(index) + "_"
 
     # Save image
@@ -155,6 +157,7 @@ def find_vanishing_point_center(all_lines, all_lines_hough, output_path=None, w=
             sm.set_array([])
             plt.colorbar(sm, ax=plt.gca(), label='Line Segment Index')
             plt.tight_layout()
+            os.makedirs(output_path + "/vp_center", exist_ok=True)
             plt.savefig(output_path + "/vp_center/hough_lines_" + names[j] + ".png", dpi=300, bbox_inches='tight')
             plt.close()
 

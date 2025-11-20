@@ -98,8 +98,9 @@ def draw_bounding_box_on_frame(frame_image, frame_contours, vp_center_x, vp_cent
     line_length = np.sqrt(w**2 + h**2)
     line_length_side = line_length * 4
 
-    lines_bottom_front = []
-    lines_bottom_inner = []
+    lines_width = []
+    lines_depth = []
+    lines_height = []
 
     if frame_contours:
         contours = [contour[1] for contour in frame_contours]
@@ -169,10 +170,18 @@ def draw_bounding_box_on_frame(frame_image, frame_contours, vp_center_x, vp_cent
             outer_top = line_intersection(vp, center_top, vert_outside, [vert_outside[0], -1])
             far_top = line_intersection(vp, center_top, vp_horizontal, side_top)
             front_top = line_intersection(vp, inner_top, front_bottom, [front_bottom[0], -1])
-            # Unused: far_bottom = line_intersection(vp, outer_bottom, far_top, [far_top[0], -1])
+            far_bottom = line_intersection(vp, outer_bottom, far_top, [far_top[0], -1])
 
-            lines_bottom_front.append([front_bottom, outer_bottom])
-            lines_bottom_inner.append([inner_bottom, front_bottom])
+            # Correction step (assumption of flat horizon)
+            outer_bottom = [outer_bottom[0], front_bottom[1]]
+            outer_top = [outer_top[0], front_top[1]]
+            far_bottom = [far_bottom[0], inner_bottom[1]]
+            far_top = [far_top[0], inner_top[1]]
+
+            # Line collection for BEV
+            lines_width.extend([[front_bottom, outer_bottom], [front_top, outer_top]])
+            lines_depth.extend([[inner_bottom, front_bottom], [inner_top, front_top]])
+            lines_height.extend([[front_bottom, front_top], [outer_bottom, outer_top]])
             
             # Store intersection points (optional: can be used for further processing)
             intersections = [
@@ -260,7 +269,7 @@ def draw_bounding_box_on_frame(frame_image, frame_contours, vp_center_x, vp_cent
             #         (int(vert_outside[0]), h),
             #         (100, 100, 0), 2, cv2.LINE_AA)  # Cyan line for max x            
     
-    return output_image, lines_bottom_front, lines_bottom_inner
+    return output_image, lines_width, lines_depth, lines_height
 
 def find_3d_bounding_boxes(contours, vp_center_x, vp_center_y, vp_left_x, vp_left_y, vp_right_x, vp_right_y, output_path, w, h, fps=25.0):
     """
@@ -278,7 +287,7 @@ def find_3d_bounding_boxes(contours, vp_center_x, vp_center_y, vp_left_x, vp_lef
     """
     if not contours or len(contours) == 0:
         print("[Export] No contours to process")
-        return
+        return [], []
     
     # Ensure output directory exists
     os.makedirs(output_path, exist_ok=True)
@@ -292,8 +301,9 @@ def find_3d_bounding_boxes(contours, vp_center_x, vp_center_y, vp_left_x, vp_lef
         raise ValueError(f"Could not create video writer for {output_file}")
     
     # Process all frames
-    lines_bottom_front_all = []
-    lines_bottom_inner_all = []
+    lines_width_all = []
+    lines_height_all = []
+    lines_depth_all = []
 
     print("9 [3D bounding boxes] With {len(contours)} frames")
     for frame_idx, frame_data in enumerate(contours):
@@ -301,7 +311,7 @@ def find_3d_bounding_boxes(contours, vp_center_x, vp_center_y, vp_left_x, vp_lef
         frame_image, frame_contours = frame_data
         
         # Draw bounding boxes on this frame
-        output_frame, lines_bottom_front, lines_bottom_inner = draw_bounding_box_on_frame(
+        output_frame, lines_width, lines_depth, lines_height = draw_bounding_box_on_frame(
             frame_image, frame_contours,
             vp_center_x, vp_center_y, 
             vp_left_x, vp_left_y, 
@@ -310,8 +320,9 @@ def find_3d_bounding_boxes(contours, vp_center_x, vp_center_y, vp_left_x, vp_lef
         )
 
         # Collect measurement lines
-        lines_bottom_front_all.extend(lines_bottom_front)
-        lines_bottom_inner_all.extend(lines_bottom_inner)
+        lines_width_all.extend(lines_width)
+        lines_depth_all.extend(lines_depth)
+        lines_height_all.extend(lines_height)
 
         # Write frame to video
         out.write(output_frame)
@@ -322,5 +333,5 @@ def find_3d_bounding_boxes(contours, vp_center_x, vp_center_y, vp_left_x, vp_lef
     # Release video writer
     out.release()
 
-    return lines_bottom_front_all, lines_bottom_inner_all
+    return lines_width_all, lines_depth_all, lines_height_all
 
